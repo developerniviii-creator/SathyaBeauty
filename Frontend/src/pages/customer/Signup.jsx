@@ -15,6 +15,16 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (formData.password.length < 8) {
+      Swal.fire({
+        title: 'Password too short',
+        text: 'Password must be at least 8 characters long.',
+        icon: 'error',
+        confirmButtonColor: '#E91E63'
+      });
+      return;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
       Swal.fire({
         title: 'Passwords do not match',
@@ -50,7 +60,7 @@ const Signup = () => {
       }
       
       const responseData = await response.json();
-      login(responseData.user, responseData.user.is_admin ? 'admin' : 'customer');
+      customerLogin(responseData.user);
       localStorage.setItem('customer_access_token', responseData.access);
       localStorage.setItem('customer_refresh_token', responseData.refresh);
       
@@ -158,6 +168,7 @@ const Signup = () => {
                   name="password"
                   autoComplete="new-password"
                   required
+                  minLength="8"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
@@ -171,6 +182,7 @@ const Signup = () => {
                   {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
+              <p className="mt-2 text-xs text-gray-500 font-medium">Enter a minimum of 8 characters.</p>
             </div>
 
             <div>

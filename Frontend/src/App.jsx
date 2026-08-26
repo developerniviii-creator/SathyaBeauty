@@ -23,8 +23,10 @@ import CustomerMyBookings from './pages/customer/MyBookings';
 import CustomerProfile from './pages/customer/Profile';
 import BookingForm from './pages/customer/BookingForm';
 import Login from './pages/customer/Login';
+import ForgotPassword from './pages/customer/ForgotPassword';
 import Signup from './pages/customer/Signup';
 import AdminLogin from './pages/admin/AdminLogin';
+import AdminForgotPassword from './pages/admin/AdminForgotPassword';
 
 const Placeholder = ({ title }) => <div className="p-8"><h1 className="text-2xl font-bold">{title} Page</h1></div>;
 
@@ -36,8 +38,10 @@ function App() {
           <Routes>
             {/* Standalone Auth Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
 
             {/* Customer Routes */}
             <Route path="/" element={<CustomerLayout />}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaUserShield, FaLock, FaEnvelope, FaSpa, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
@@ -167,7 +167,7 @@ const AdminLogin = () => {
             >
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 text-sm font-bold">Password</label>
-                <a href="#" className="text-xs font-bold text-primary hover:text-pink-700 transition-colors">Forgot Password?</a>
+                <Link to="/admin-forgot-password" state={{ email: formData.email }} className="text-xs font-bold text-primary hover:text-pink-700 transition-colors">Forgot Password?</Link>
               </div>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">

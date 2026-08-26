@@ -130,3 +130,19 @@ class SystemSetting(models.Model):
 
     def __str__(self):
         return "System Settings"
+
+class OTPVerification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='otp_verifications')
+    otp = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.otp}"
+
+class AdminOTPVerification(models.Model):
+    admin = models.ForeignKey(AdminUser, on_delete=models.CASCADE, related_name='otp_verifications')
+    otp = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.admin.email} - {self.otp}"

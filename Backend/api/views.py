@@ -6,8 +6,11 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 import razorpay
 import datetime
+import random
+from django.core.mail import send_mail
+from django.utils import timezone
 
-from .models import Service, Package, Offer, Booking, Payment, AdminUser, SystemSetting
+from .models import Service, Package, Offer, Booking, Payment, AdminUser, SystemSetting, OTPVerification, AdminOTPVerification
 from .serializers import (
     UserSerializer, RegisterSerializer, ServiceSerializer,
     PackageSerializer, OfferSerializer, BookingSerializer, PaymentSerializer, CustomTokenObtainPairSerializer,
@@ -253,3 +256,193 @@ class SystemSettingView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SendOTPView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return Response({'error': 'No account found with this email'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Generate 4 digit OTP
+        otp = str(random.randint(1000, 9999))
+        
+        # Save OTP (remove old ones if any)
+        OTPVerification.objects.filter(user=user).delete()
+        OTPVerification.objects.create(user=user, otp=otp)
+        
+        # Send Email
+        try:
+            send_mail(
+                'Password Reset OTP',
+                f'Your OTP for password reset is {otp}. It is valid for 10 minutes.',
+                None,
+                [email],
+                fail_silently=False,
+            )
+            return Response({'message': 'OTP sent successfully'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class VerifyOTPView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        otp = request.data.get('otp')
+        
+        if not email or not otp:
+            return Response({'error': 'Email and OTP are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        verification = OTPVerification.objects.filter(user=user).order_by('-created_at').first()
+        
+        if not verification:
+            return Response({'error': 'No OTP requested'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check expiry (10 mins)
+        if timezone.now() - verification.created_at > timezone.timedelta(minutes=10):
+            verification.delete()
+            return Response({'error': 'OTP has expired'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if verification.otp != str(otp):
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        return Response({'message': 'OTP verified successfully'})
+
+class ResetPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        otp = request.data.get('otp')
+        new_password = request.data.get('new_password')
+        
+        if not all([email, otp, new_password]):
+            return Response({'error': 'Email, OTP, and new password are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        verification = OTPVerification.objects.filter(user=user, otp=otp).first()
+        
+        if not verification:
+            return Response({'error': 'Invalid or expired OTP'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check expiry
+        if timezone.now() - verification.created_at > timezone.timedelta(minutes=10):
+            verification.delete()
+            return Response({'error': 'OTP has expired'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Update password
+        user.set_password(new_password)
+        user.save()
+        
+        # Cleanup
+        verification.delete()
+        
+        return Response({'message': 'Password reset successfully'})
+
+class AdminSendOTPView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        admin = AdminUser.objects.filter(email=email).first()
+        if not admin:
+            return Response({'error': 'No admin account found with this email'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Generate 4 digit OTP
+        otp = str(random.randint(1000, 9999))
+        
+        # Save OTP (remove old ones if any)
+        AdminOTPVerification.objects.filter(admin=admin).delete()
+        AdminOTPVerification.objects.create(admin=admin, otp=otp)
+        
+        # Send Email
+        try:
+            send_mail(
+                'Admin Password Reset OTP',
+                f'Your OTP for admin password reset is {otp}. It is valid for 10 minutes.',
+                None,
+                [email],
+                fail_silently=False,
+            )
+            return Response({'message': 'OTP sent successfully'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class AdminVerifyOTPView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        otp = request.data.get('otp')
+        
+        if not email or not otp:
+            return Response({'error': 'Email and OTP are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        admin = AdminUser.objects.filter(email=email).first()
+        if not admin:
+            return Response({'error': 'Admin not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        verification = AdminOTPVerification.objects.filter(admin=admin).order_by('-created_at').first()
+        
+        if not verification:
+            return Response({'error': 'No OTP requested'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check expiry (10 mins)
+        if timezone.now() - verification.created_at > timezone.timedelta(minutes=10):
+            verification.delete()
+            return Response({'error': 'OTP has expired'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if verification.otp != str(otp):
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        return Response({'message': 'OTP verified successfully'})
+
+class AdminResetPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        otp = request.data.get('otp')
+        new_password = request.data.get('new_password')
+        
+        if not all([email, otp, new_password]):
+            return Response({'error': 'Email, OTP, and new password are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        admin = AdminUser.objects.filter(email=email).first()
+        if not admin:
+            return Response({'error': 'Admin not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        verification = AdminOTPVerification.objects.filter(admin=admin, otp=otp).first()
+        
+        if not verification:
+            return Response({'error': 'Invalid or expired OTP'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check expiry
+        if timezone.now() - verification.created_at > timezone.timedelta(minutes=10):
+            verification.delete()
+            return Response({'error': 'OTP has expired'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Update password
+        admin.set_password(new_password)
+        admin.save()
+        
+        # Cleanup
+        verification.delete()
+        
+        return Response({'message': 'Password reset successfully'})
