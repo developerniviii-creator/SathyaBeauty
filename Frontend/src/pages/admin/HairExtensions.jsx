@@ -16,7 +16,7 @@ const AdminHairExtensions = () => {
 
   const fetchHairExtensions = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/services/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
       if (res.ok) {
         const data = await res.json();
         const extensions = data.filter(s => s.category === 'Hair Extensions');
@@ -90,7 +90,7 @@ const AdminHairExtensions = () => {
         const itemToEdit = savedItems.find(item => item.id === editingId);
         if (itemToEdit && itemToEdit.services) {
           await Promise.all(itemToEdit.services.map(s => 
-            fetch(`http://127.0.0.1:8000/api/services/${s.id}/`, {
+            fetch(`${import.meta.env.VITE_API_URL}/services/${s.id}/`, {
               method: 'DELETE',
               headers: { 'Authorization': `Bearer ${token}` }
             })
@@ -113,7 +113,7 @@ const AdminHairExtensions = () => {
           submitData.append('image', formData.image);
         }
         
-        const res = await fetch('http://127.0.0.1:8000/api/services/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: submitData
@@ -163,7 +163,7 @@ const AdminHairExtensions = () => {
         const itemToDelete = savedItems.find(item => item.id === id);
         if (itemToDelete && itemToDelete.services) {
           await Promise.all(itemToDelete.services.map(s => 
-            fetch(`http://127.0.0.1:8000/api/services/${s.id}/`, {
+            fetch(`${import.meta.env.VITE_API_URL}/services/${s.id}/`, {
               method: 'DELETE',
               headers: { 'Authorization': `Bearer ${token}` }
             })
@@ -195,8 +195,8 @@ const AdminHairExtensions = () => {
   return (
     <div className="max-w-7xl mx-auto space-y-8 font-sans pb-10 relative">
       {/* Abstract Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-pink-200/30 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
       {/* Header Section */}
       <motion.div 
@@ -219,12 +219,12 @@ const AdminHairExtensions = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="lg:col-span-5"
         >
-          <div className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 to-purple-600"></div>
+          <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-secondary"></div>
             
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <FaCut className="text-pink-500 mr-3" /> 
+                <FaCut className="text-primary mr-3" /> 
                 {editingId ? 'Edit Entry' : 'New Extension Entry'}
               </h2>
               {editingId && (
@@ -241,7 +241,7 @@ const AdminHairExtensions = () => {
               {/* Inches */}
               <div className="relative group">
                 <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                  <FaRulerVertical className="mr-2 text-pink-500" /> Length (Inches)
+                  <FaRulerVertical className="mr-2 text-primary" /> Length (Inches)
                 </label>
                 <input 
                   type="number" 
@@ -249,7 +249,7 @@ const AdminHairExtensions = () => {
                   value={formData.inches}
                   onChange={handleChange}
                   placeholder="Enter hair extension length in inches"
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                   required
                 />
               </div>
@@ -257,7 +257,7 @@ const AdminHairExtensions = () => {
               {/* Medium Price */}
               <div className="relative group">
                 <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                  <FaRupeeSign className="mr-2 text-purple-500" /> Medium Package Price
+                  <FaRupeeSign className="mr-2 text-secondary" /> Medium Package Price
                 </label>
                 <input 
                   type="number" 
@@ -265,7 +265,7 @@ const AdminHairExtensions = () => {
                   value={formData.mediumPrice}
                   onChange={handleChange}
                   placeholder="Enter medium package price"
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all shadow-sm text-gray-800"
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all shadow-sm text-gray-800"
                   required
                 />
               </div>
@@ -273,7 +273,7 @@ const AdminHairExtensions = () => {
               {/* Maximum Price */}
               <div className="relative group">
                 <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                  <FaRupeeSign className="mr-2 text-purple-500" /> Maximum Package Price
+                  <FaRupeeSign className="mr-2 text-secondary" /> Maximum Package Price
                 </label>
                 <input 
                   type="number" 
@@ -281,7 +281,7 @@ const AdminHairExtensions = () => {
                   value={formData.maximumPrice}
                   onChange={handleChange}
                   placeholder="Enter maximum package price"
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all shadow-sm text-gray-800"
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all shadow-sm text-gray-800"
                   required
                 />
               </div>
@@ -312,14 +312,14 @@ const AdminHairExtensions = () => {
                   name="image"
                   accept="image/*"
                   onChange={handleChange}
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                 />
               </div>
 
               <div className="pt-4">
                 <button 
                   type="submit"
-                  className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl hover:shadow-[0_10px_20px_rgba(236,72,153,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden"
+                  className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-2xl hover:shadow-[0_10px_20px_rgba(214,151,0,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden"
                 >
                   <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                   <span className="relative flex items-center text-lg tracking-wide">
@@ -339,14 +339,14 @@ const AdminHairExtensions = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="lg:col-span-7"
         >
-          <div className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 p-8 h-full min-h-[500px]">
+          <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 p-8 h-full min-h-[500px]">
             <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center">
               Active Offerings
             </h2>
             
             {savedItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center border-2 border-dashed border-pink-200 rounded-3xl bg-pink-50/50">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-5 shadow-sm text-pink-400">
+              <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-center border-2 border-dashed border-amber-200 rounded-3xl bg-amber-50/50">
+                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-5 shadow-sm text-primary">
                   <FaCut size={32} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800">No Services Yet</h3>
@@ -362,24 +362,24 @@ const AdminHairExtensions = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       layout
                       key={item.id}
-                      className="p-6 rounded-3xl bg-white border border-gray-100 hover:border-pink-200 shadow-sm hover:shadow-xl hover:shadow-pink-100/50 transition-all duration-300 group relative overflow-hidden flex flex-col md:flex-row gap-4"
+                      className="p-6 rounded-3xl bg-white border border-gray-100 hover:border-amber-200 shadow-sm hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-300 group relative overflow-hidden flex flex-col md:flex-row gap-4"
                     >
                       {/* Decorative element */}
-                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+                      <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br from-amber-100 to-secondary/30 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
 
                       <div className="relative z-10 flex-1 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                         <div className="flex items-center space-x-4 min-w-[240px]">
                           {item.image ? (
-                            <div className="min-w-[56px] h-14 rounded-2xl overflow-hidden shadow-lg shrink-0 border border-pink-100">
+                            <div className="min-w-[56px] h-14 rounded-2xl overflow-hidden shadow-lg shrink-0 border border-amber-100">
                               <img src={item.image} alt={`${item.inches} Inches`} className="w-full h-full object-cover" />
                             </div>
                           ) : (
-                            <div className="min-w-[56px] h-14 px-3 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0">
+                            <div className="min-w-[56px] h-14 px-3 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg shrink-0">
                               <span className="font-black text-lg sm:text-xl">{item.inches}"</span>
                             </div>
                           )}
                           <div>
-                            <h3 className="font-bold text-lg xl:text-xl text-gray-800 group-hover:text-pink-600 transition-colors">
+                            <h3 className="font-bold text-lg xl:text-xl text-gray-800 group-hover:text-primary transition-colors">
                               {item.inches} Inches Extension
                             </h3>
                             <p className="text-sm text-gray-500 font-medium">Premium Quality Hair</p>
@@ -396,16 +396,16 @@ const AdminHairExtensions = () => {
                           
                           <div className="flex justify-between items-center border-b border-gray-200/60 pb-3">
                             <span className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wider flex items-center">
-                              <span className="w-2 h-2 rounded-full bg-pink-400 mr-2"></span> Max
+                              <span className="w-2 h-2 rounded-full bg-primary mr-2"></span> Max
                             </span>
                             <span className="font-extrabold text-gray-800 text-base sm:text-lg">₹{item.maximumPrice}</span>
                           </div>
                           
                           <div className="flex justify-between items-center">
-                            <span className="text-xs sm:text-sm font-bold text-purple-500 uppercase tracking-wider flex items-center">
-                              <span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span> Full Cover
+                            <span className="text-xs sm:text-sm font-bold text-secondary uppercase tracking-wider flex items-center">
+                              <span className="w-2 h-2 rounded-full bg-secondary mr-2"></span> Full Cover
                             </span>
-                            <span className="font-black text-purple-600 text-base sm:text-lg">₹{item.fullCoverPrice}</span>
+                            <span className="font-black text-primary text-base sm:text-lg">₹{item.fullCoverPrice}</span>
                           </div>
                         </div>
                       </div>

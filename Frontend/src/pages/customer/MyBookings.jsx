@@ -17,7 +17,7 @@ const MyBookings = () => {
       const token = localStorage.getItem('customer_access_token');
       if (!token) return;
 
-      const response = await axios.get('http://127.0.0.1:8000/api/bookings/', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/bookings/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -47,14 +47,14 @@ const MyBookings = () => {
       text: 'Are you sure you want to cancel this appointment?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#E91E63',
+      confirmButtonColor: '#D69700',
       cancelButtonColor: '#9ca3af',
       confirmButtonText: 'Yes, cancel it'
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const token = localStorage.getItem('customer_access_token');
-          await axios.patch(`http://127.0.0.1:8000/api/bookings/${bookingId}/`, 
+          await axios.patch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}/`, 
             { status: 'cancelled' },
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -63,7 +63,7 @@ const MyBookings = () => {
             title: 'Cancelled!',
             text: 'Your booking has been cancelled.',
             icon: 'success',
-            confirmButtonColor: '#E91E63'
+            confirmButtonColor: '#D69700'
           });
         } catch (error) {
           Swal.fire('Error', 'Could not cancel booking.', 'error');
@@ -73,7 +73,7 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF5F8] py-12 px-6 font-sans">
+    <div className="min-h-screen bg-amber-50 py-12 px-6 font-sans">
       <div className="max-w-4xl mx-auto">
         
         <div className="text-center mb-12">
@@ -107,7 +107,7 @@ const MyBookings = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -100 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-white rounded-3xl shadow-lg border border-pink-50 p-6 md:p-8 flex flex-col md:flex-row justify-between md:items-center group"
+                    className="bg-white rounded-3xl shadow-lg border border-amber-100 p-6 md:p-8 flex flex-col md:flex-row justify-between md:items-center group"
                   >
                     <div className="mb-6 md:mb-0 flex-1">
                       <div className="flex items-center space-x-3 mb-3">

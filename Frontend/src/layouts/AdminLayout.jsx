@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaCut, FaBoxOpen, FaHandSparkles, FaTags, FaCalendarAlt, FaUsers, FaMoneyBillWave, FaCog, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/SathyaBeauty.png';
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -45,8 +46,11 @@ const AdminLayout = () => {
     <div className="flex h-screen bg-background overflow-hidden relative">
       
       {/* Mobile Header */}
-      <div className="md:hidden absolute top-0 left-0 right-0 h-16 bg-white shadow-md border-b border-pink-50 flex items-center justify-between px-4 z-20">
-        <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Sathya Admin</h2>
+      <div className="md:hidden absolute top-0 left-0 right-0 h-16 bg-white shadow-md border-b border-amber-100 flex items-center justify-between px-4 z-20">
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Sathya Beauty" className="w-8 h-8 object-contain" />
+          <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-serif tracking-tight">SathyaBeauty</h2>
+        </div>
         <button 
           onClick={() => setIsMobileMenuOpen(true)}
           className="text-primary p-2 focus:outline-none"
@@ -75,7 +79,10 @@ const AdminLayout = () => {
         }`}
       >
         <div className="p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary hidden md:block">Sathya Admin</h2>
+          <div className="hidden md:flex items-center gap-3">
+            <img src={logo} alt="Sathya Beauty" className="w-10 h-10 object-contain" />
+            <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-serif tracking-tight">SathyaBeauty</h2>
+          </div>
           <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary md:hidden">Menu</h2>
           <button 
             onClick={closeMobileMenu}
@@ -92,7 +99,7 @@ const AdminLayout = () => {
                   to={item.path}
                   onClick={closeMobileMenu}
                   className={`flex items-center px-4 py-3 rounded-xl transition-all duration-300 ${
-                    location.pathname === item.path ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-pink-500/30 font-semibold' : 'text-gray-600 hover:bg-pink-50 hover:text-primary font-medium'
+                    location.pathname === item.path ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/30 font-semibold' : 'text-gray-600 hover:bg-amber-50 hover:text-primary font-medium'
                   }`}
                 >
                   <span className={`mr-3 text-lg ${location.pathname === item.path ? 'text-white' : 'text-secondary'}`}>{item.icon}</span>
@@ -105,7 +112,7 @@ const AdminLayout = () => {
         <div className="p-5 border-t border-secondary/20 bg-white">
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center w-full px-6 py-3 text-primary bg-pink-50 hover:bg-pink-100 font-bold transition-all rounded-xl border border-pink-100 hover:shadow-sm"
+            className="flex items-center justify-center w-full px-6 py-3 text-primary bg-amber-50 hover:bg-amber-100 font-bold transition-all rounded-xl border border-amber-100 hover:shadow-sm"
           >
             <FaSignOutAlt className="mr-3 text-primary" /> Logout
           </button>
@@ -113,7 +120,7 @@ const AdminLayout = () => {
       </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 bg-pink-50/30 w-full">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 bg-amber-50/30 w-full">
         <Outlet />
       </main>
     </div>

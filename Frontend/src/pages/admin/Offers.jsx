@@ -34,7 +34,7 @@ const AdminOffers = () => {
 
   const fetchOffers = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/offers/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/offers/`);
       if (res.ok) {
         const data = await res.json();
         
@@ -137,7 +137,7 @@ const AdminOffers = () => {
     
     try {
       if (modalMode === 'add') {
-        const res = await fetch('http://127.0.0.1:8000/api/offers/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/offers/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -150,7 +150,7 @@ const AdminOffers = () => {
           alert('Error saving offer');
         }
       } else {
-        const res = await fetch(`http://127.0.0.1:8000/api/offers/${currentOffer.id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/offers/${currentOffer.id}/`, {
           method: 'PUT', // or PATCH if you only want to update partial
           headers: {
             'Authorization': `Bearer ${token}`
@@ -176,7 +176,7 @@ const AdminOffers = () => {
     if (window.confirm("Are you sure you want to delete this offer?")) {
       const token = localStorage.getItem('admin_access_token');
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/offers/${id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/offers/${id}/`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -196,8 +196,8 @@ const AdminOffers = () => {
   return (
     <div className="relative font-sans min-h-[80vh] pb-10">
       {/* Abstract Backgrounds */}
-      <div className="absolute top-20 right-10 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl -z-10"></div>
 
       <div className="flex justify-between items-center mb-8 relative z-10">
         <div>
@@ -206,7 +206,7 @@ const AdminOffers = () => {
         </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-md hover:shadow-lg text-white px-6 py-3 rounded-xl flex items-center transition-all duration-300 transform hover:-translate-y-1 font-bold"
+          className="bg-gradient-to-r from-primary to-secondary hover:from-[#c28900] hover:to-primary shadow-md shadow-primary/30 hover:shadow-lg text-white px-6 py-3 rounded-xl flex items-center transition-all duration-300 transform hover:-translate-y-1 font-bold"
         >
           <FaPlus className="mr-2" /> Add Offer
         </button>
@@ -222,14 +222,14 @@ const AdminOffers = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 overflow-hidden relative group flex flex-col hover:shadow-2xl hover:shadow-pink-200/50 transition-all"
+              className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 overflow-hidden relative group flex flex-col hover:shadow-2xl hover:shadow-amber-200/50 transition-all"
             >
               {offer.validUntil && (
-                <div className="absolute top-0 right-0 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-bold px-4 py-2 rounded-bl-xl shadow-sm z-10">
+                <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold px-4 py-2 rounded-bl-xl shadow-sm z-10">
                   Valid Till: {offer.validUntil}
                 </div>
               )}
-              <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+              <div className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-amber-100 to-secondary/30 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
 
               {/* Offer Image */}
               {offer.image && (
@@ -240,17 +240,17 @@ const AdminOffers = () => {
               )}
 
               <div className="p-8 relative z-10 flex-1 flex flex-col">
-                <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-pink-600 transition-colors">{offer.name}</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-primary transition-colors">{offer.name}</h3>
                 
                 {offer.duration && (
                   <p className="text-sm text-gray-500 flex items-center mb-3 font-medium">
-                    <FaClock className="mr-2 text-pink-500" /> {offer.duration}
+                    <FaClock className="mr-2 text-primary" /> {offer.duration}
                   </p>
                 )}
                 
-                <div className="mb-6 flex flex-wrap gap-2 flex-1">
+                <div className="mb-6 flex flex-wrap gap-2 flex-1 items-start content-start">
                   {offer.services && offer.services.length > 0 ? offer.services.map((srv, idx) => (
-                    <span key={idx} className="bg-pink-50 text-pink-600 text-xs font-bold px-3 py-1 rounded-full border border-pink-100">
+                    <span key={idx} className="bg-amber-50 text-primary text-xs font-bold px-3 py-1 rounded-full border border-amber-100">
                       {srv}
                     </span>
                   )) : (
@@ -258,7 +258,7 @@ const AdminOffers = () => {
                   )}
                 </div>
                 
-                <div className="flex items-end space-x-3 mb-8 bg-pink-50/50 p-4 rounded-2xl mt-auto border border-pink-50">
+                <div className="flex items-end space-x-3 mb-8 bg-amber-50/50 p-4 rounded-2xl mt-auto border border-amber-100">
                   <span className="text-3xl font-extrabold text-primary">₹{offer.offerPrice}</span>
                   <span className="text-sm text-gray-500 line-through mb-1 font-medium">₹{offer.originalPrice}</span>
                   <span className="text-xs font-bold text-green-500 mb-1.5 ml-auto bg-green-50 px-2 py-1 rounded-md">
@@ -269,7 +269,7 @@ const AdminOffers = () => {
                 <div className="flex justify-between items-center border-t border-gray-100 pt-4 mt-auto">
                   <button 
                     onClick={() => handleOpenEdit(offer)}
-                    className="text-gray-500 hover:text-pink-600 hover:bg-pink-50 px-4 py-2 rounded-xl transition-all duration-300 text-sm font-bold flex items-center"
+                    className="text-gray-500 hover:text-primary hover:bg-amber-50 px-4 py-2 rounded-xl transition-all duration-300 text-sm font-bold flex items-center"
                   >
                     <FaEdit className="mr-2" /> Edit
                   </button>
@@ -302,7 +302,7 @@ const AdminOffers = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-3xl w-full max-w-xl p-8 shadow-2xl shadow-pink-200/50 relative z-10 border border-pink-100 max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-3xl w-full max-w-xl p-8 shadow-2xl shadow-primary/20 relative z-10 border border-amber-100 max-h-[90vh] overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-extrabold text-primary">
@@ -310,7 +310,7 @@ const AdminOffers = () => {
                 </h2>
                 <button 
                   onClick={handleCloseModal}
-                  className="text-gray-400 hover:text-primary bg-gray-50 hover:bg-pink-50 p-2 rounded-full transition-colors"
+                  className="text-gray-400 hover:text-primary bg-gray-50 hover:bg-amber-50 p-2 rounded-full transition-colors"
                 >
                   <FaTimes size={18} />
                 </button>
@@ -320,13 +320,13 @@ const AdminOffers = () => {
                 {/* Image Upload */}
                 <div>
                   <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                    <FaImage className="mr-2 text-pink-500" /> Offer Image
+                    <FaImage className="mr-2 text-primary" /> Offer Image
                   </label>
                   <input 
                     type="file" 
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                    className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-primary hover:file:bg-amber-100"
                   />
                   {currentOffer.image && typeof currentOffer.image === 'string' && (
                     <div className="mt-3">
@@ -344,7 +344,7 @@ const AdminOffers = () => {
                     value={currentOffer?.name || ''} 
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                    className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                     placeholder="Enter combo offer name"
                   />
                 </div>
@@ -369,7 +369,7 @@ const AdminOffers = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute z-20 w-full mt-2 bg-white rounded-2xl shadow-xl border border-pink-100 overflow-hidden"
+                        className="absolute z-20 w-full mt-2 bg-white rounded-2xl shadow-xl border border-amber-100 overflow-hidden"
                       >
                         <div className="max-h-60 overflow-y-auto p-2 custom-scrollbar">
                           {availableServicesList.map(service => {
@@ -378,14 +378,14 @@ const AdminOffers = () => {
                               <div 
                                 key={service}
                                 onClick={() => toggleService(service)}
-                                className={`flex items-center px-4 py-3 rounded-xl cursor-pointer transition-colors ${isSelected ? 'bg-pink-50' : 'hover:bg-gray-50'}`}
+                                className={`flex items-center px-4 py-3 rounded-xl cursor-pointer transition-colors ${isSelected ? 'bg-amber-50' : 'hover:bg-gray-50'}`}
                               >
                                 {isSelected ? (
-                                  <FaCheckSquare className="text-pink-500 mr-3 text-lg" />
+                                  <FaCheckSquare className="text-primary mr-3 text-lg" />
                                 ) : (
                                   <FaRegSquare className="text-gray-300 mr-3 text-lg" />
                                 )}
-                                <span className={`font-bold ${isSelected ? 'text-pink-700' : 'text-gray-600'}`}>{service}</span>
+                                <span className={`font-bold ${isSelected ? 'text-primary' : 'text-gray-600'}`}>{service}</span>
                               </div>
                             );
                           })}
@@ -398,27 +398,27 @@ const AdminOffers = () => {
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                      <FaClock className="mr-2 text-pink-500" /> Duration
+                      <FaClock className="mr-2 text-primary" /> Duration
                     </label>
                     <input 
                       type="text" 
                       name="duration"
                       value={currentOffer?.duration || ''} 
                       onChange={handleChange}
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                       placeholder="e.g. 2-3 hours"
                     />
                   </div>
                   <div>
                     <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                      <FaCalendarAlt className="mr-2 text-purple-500" /> Valid Until
+                      <FaCalendarAlt className="mr-2 text-secondary" /> Valid Until
                     </label>
                     <input 
                       type="text" 
                       name="validUntil"
                       value={currentOffer?.validUntil || ''} 
                       onChange={handleChange}
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all shadow-sm text-gray-800"
                       placeholder="e.g. 31 Dec, 2026"
                     />
                   </div>
@@ -433,7 +433,7 @@ const AdminOffers = () => {
                       value={currentOffer?.originalPrice || ''} 
                       onChange={handleChange}
                       required
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                       placeholder="Enter original price"
                     />
                   </div>
@@ -445,7 +445,7 @@ const AdminOffers = () => {
                       value={currentOffer?.offerPrice || ''} 
                       onChange={handleChange}
                       required
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all shadow-sm font-bold text-purple-700"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all shadow-sm font-bold text-primary"
                       placeholder="Enter discounted price"
                     />
                   </div>
@@ -455,7 +455,7 @@ const AdminOffers = () => {
                   <button 
                     type="submit"
                     disabled={isLoading}
-                    className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl hover:shadow-[0_10px_20px_rgba(236,72,153,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                    className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-2xl hover:shadow-[0_10px_20px_rgba(214,151,0,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                     <span className="relative flex items-center text-lg tracking-wide">

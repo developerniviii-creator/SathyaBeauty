@@ -28,9 +28,9 @@ const AdminDashboard = () => {
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
 
         const [custRes, bookRes, servRes] = await Promise.all([
-          fetch('http://127.0.0.1:8000/api/users/customers/', { headers }),
-          fetch('http://127.0.0.1:8000/api/bookings/', { headers }),
-          fetch('http://127.0.0.1:8000/api/services/', { headers }) // Note: services might not strictly need auth but safe to pass
+          fetch(`${import.meta.env.VITE_API_URL}/users/customers/`, { headers }),
+          fetch(`${import.meta.env.VITE_API_URL}/bookings/`, { headers }),
+          fetch(`${import.meta.env.VITE_API_URL}/services/`, { headers }) // Note: services might not strictly need auth but safe to pass
         ]);
 
         const customers = custRes.ok ? await custRes.json() : [];

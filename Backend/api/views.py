@@ -9,6 +9,7 @@ import datetime
 import random
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.conf import settings
 
 from .models import Service, Package, Offer, Booking, Payment, AdminUser, SystemSetting, OTPVerification, AdminOTPVerification
 from .serializers import (
@@ -18,9 +19,7 @@ from .serializers import (
 )
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-RZP_KEY_ID = "rzp_test_TS2Tc99ViB4w2Y"
-RZP_KEY_SECRET = "QB0Nv9oTFia65jfx8Oq450lR"
-razorpay_client = razorpay.Client(auth=(RZP_KEY_ID, RZP_KEY_SECRET))
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -196,7 +195,7 @@ class CreateRazorpayOrderView(APIView):
                 'order_id': razorpay_order['id'],
                 'amount': amount,
                 'currency': currency,
-                'key_id': RZP_KEY_ID,
+                'key_id': settings.RAZORPAY_KEY_ID,
                 'booking_id': str(booking.id)
             }, status=status.HTTP_201_CREATED)
             
@@ -446,3 +445,68 @@ class AdminResetPasswordView(APIView):
         verification.delete()
         
         return Response({'message': 'Password reset successfully'})
+
+class GoogleLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        access_token = request.data.get('access_token')
+        if not access_token:
+            return Response({'error': 'Access token is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Use the access token to get user info from Google
+            import requests as http_requests
+            userinfo_response = http_requests.get(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                headers={'Authorization': f'Bearer {access_token}'}
+            )
+
+            if userinfo_response.status_code != 200:
+                return Response({'error': 'Invalid Google token'}, status=status.HTTP_400_BAD_REQUEST)
+
+            userinfo = userinfo_response.json()
+            email = userinfo.get('email')
+            first_name = userinfo.get('given_name', '')
+            last_name = userinfo.get('family_name', '')
+
+            if not email:
+                return Response({'error': 'Could not retrieve email from Google'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if user already exists
+            user = User.objects.filter(email=email).first()
+
+            if not user:
+                # Create a new user account
+                import uuid
+                username = email.split('@')[0]
+                # Ensure username is unique
+                if User.objects.filter(username=username).exists():
+                    username = f"{username}_{uuid.uuid4().hex[:6]}"
+
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=uuid.uuid4().hex,  # Random password since they use Google
+                    first_name=first_name,
+                    last_name=last_name,
+                    is_customer=True,
+                    is_admin=False
+                )
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            refresh['user_type'] = 'customer'
+
+            from .serializers import UserSerializer
+            user_data = UserSerializer(user).data
+
+            return Response({
+                'user': user_data,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': f'Google authentication failed: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+

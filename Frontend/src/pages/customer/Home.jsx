@@ -8,12 +8,12 @@ const Home = () => {
   const [showAllFeatures, setShowAllFeatures] = useState(false);
 
   const allFeatures = [
-    { icon: <FaCut size={32} />, title: 'Expert Stylists', desc: 'Crafting the perfect look for you with modern styling techniques.', bg: 'bg-pink-50', text: 'text-pink-500', border: 'border-pink-200' },
-    { icon: <FaHandSparkles size={32} />, title: 'Premium Products', desc: 'Skin-friendly luxury brands that nourish your natural beauty.', bg: 'bg-purple-50', text: 'text-purple-500', border: 'border-purple-200' },
-    { icon: <FaHeart size={32} />, title: 'Home Service', desc: 'Pampering professional salon treatments at your doorstep.', bg: 'bg-rose-50', text: 'text-rose-500', border: 'border-rose-200' },
-    { icon: <FaShieldAlt size={32} />, title: 'Hygiene First', desc: 'Strict sterilization protocols to ensure your complete safety.', bg: 'bg-blue-50', text: 'text-blue-500', border: 'border-blue-200' },
-    { icon: <FaGem size={32} />, title: 'Affordable Luxury', desc: 'Experience premium quality services at pocket-friendly prices.', bg: 'bg-amber-50', text: 'text-amber-500', border: 'border-amber-200' },
-    { icon: <FaSmileBeam size={32} />, title: '100% Satisfaction', desc: 'We are dedicated to making sure you leave completely happy.', bg: 'bg-green-50', text: 'text-green-500', border: 'border-green-200' }
+    { icon: <FaCut size={32} />, title: 'Expert Stylists', desc: 'Crafting the perfect look for you with modern styling techniques.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
+    { icon: <FaHandSparkles size={32} />, title: 'Premium Products', desc: 'Skin-friendly luxury brands that nourish your natural beauty.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
+    { icon: <FaHeart size={32} />, title: 'Home Service', desc: 'Pampering professional salon treatments at your doorstep.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
+    { icon: <FaShieldAlt size={32} />, title: 'Hygiene First', desc: 'Strict sterilization protocols to ensure your complete safety.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
+    { icon: <FaGem size={32} />, title: 'Affordable Luxury', desc: 'Experience premium quality services at pocket-friendly prices.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
+    { icon: <FaSmileBeam size={32} />, title: '100% Satisfaction', desc: 'We are dedicated to making sure you leave completely happy.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' }
   ];
 
   const displayedFeatures = showAllFeatures ? allFeatures : allFeatures.slice(0, 3);
@@ -22,7 +22,7 @@ const Home = () => {
     <div className="flex flex-col min-h-screen font-sans">
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1920')" }}>
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-900/80 to-black/60 backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/80 to-black/70 backdrop-blur-[2px]"></div>
         
         {/* Floating elements for visual flair */}
         <motion.div animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute top-20 left-20 w-32 h-32 bg-primary/30 rounded-full blur-3xl"></motion.div>
@@ -45,7 +45,7 @@ const Home = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-12">
-            <Link to="/book" className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-xl focus:outline-none shadow-[0_10px_20px_rgba(233,30,99,0.3)] hover:shadow-[0_15px_30px_rgba(233,30,99,0.5)] hover:-translate-y-1">
+            <Link to="/book" className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-xl focus:outline-none shadow-[0_10px_20px_rgba(214,151,0,0.3)] hover:shadow-[0_15px_30px_rgba(214,151,0,0.5)] hover:-translate-y-1">
               Book Appointment Now
               <svg className="w-5 h-5 ml-2 -mr-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </Link>
@@ -152,10 +152,10 @@ const Home = () => {
                     <FaStar />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-white transition-colors duration-500">{service.name}</h3>
-                  <p className="text-gray-500 mb-6 line-clamp-2 text-sm group-hover:text-pink-100 transition-colors duration-500">{service.description}</p>
+                  <p className="text-gray-500 mb-6 line-clamp-2 text-sm group-hover:text-amber-100 transition-colors duration-500">{service.description}</p>
                   <div className="flex justify-between items-center pt-4 border-t border-gray-100 group-hover:border-white/20 transition-colors duration-500">
                     <div>
-                      <span className="text-xs text-gray-400 block group-hover:text-pink-200 transition-colors duration-500">Starting from</span>
+                      <span className="text-xs text-gray-400 block group-hover:text-amber-200 transition-colors duration-500">Starting from</span>
                       <span className="text-2xl font-extrabold text-primary group-hover:text-white transition-colors duration-500">₹{service.price}</span>
                     </div>
                   </div>
@@ -173,7 +173,7 @@ const Home = () => {
       </section>
       
       {/* Reviews Section */}
-      <section className="py-24 bg-gradient-to-br from-pink-50 to-white relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-amber-50 to-white relative overflow-hidden">
         {/* Decorative background circle */}
         <div className="absolute -right-20 -top-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
         

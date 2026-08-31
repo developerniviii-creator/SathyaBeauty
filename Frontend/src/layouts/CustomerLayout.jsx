@@ -12,7 +12,7 @@ const CustomerLayout = () => {
   const { customerUser } = useAuth();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/settings/')
+    axios.get(`${import.meta.env.VITE_API_URL}/settings/`)
       .then(response => {
         if (response.data && response.data.application_address) {
           setAddress(response.data.application_address);

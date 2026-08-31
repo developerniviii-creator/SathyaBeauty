@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../context/AuthContext';
+import logo from '../../assets/SathyaBeauty.png';
+import signupImage from '../../assets/Signupimage.png';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const Signup = () => {
         title: 'Password too short',
         text: 'Password must be at least 8 characters long.',
         icon: 'error',
-        confirmButtonColor: '#E91E63'
+        confirmButtonColor: '#D69700'
       });
       return;
     }
@@ -30,7 +32,7 @@ const Signup = () => {
         title: 'Passwords do not match',
         text: 'Please make sure your passwords match.',
         icon: 'error',
-        confirmButtonColor: '#E91E63'
+        confirmButtonColor: '#D69700'
       });
       return;
     }
@@ -46,7 +48,7 @@ const Signup = () => {
         phone_number: formData.phone
       };
       
-      const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,39 +70,43 @@ const Signup = () => {
         title: 'Account Created!',
         text: 'Welcome to Sathya Beauty.',
         icon: 'success',
-        confirmButtonColor: '#E91E63'
+        confirmButtonColor: '#D69700'
       }).then(() => navigate('/'));
     } catch (error) {
       Swal.fire({
         title: 'Signup Failed',
         text: error.message,
         icon: 'error',
-        confirmButtonColor: '#E91E63'
+        confirmButtonColor: '#D69700'
       });
     }
   };
 
   return (
-    <div className="min-h-screen flex font-sans">
+    <div className="h-screen overflow-hidden flex font-sans">
       {/* Left Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-background px-6 py-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-background px-6 py-8 overflow-y-auto">
         <motion.div 
           initial={{ opacity: 0, x: -20 }} 
           animate={{ opacity: 1, x: 0 }} 
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-md bg-white p-10 rounded-[2rem] shadow-2xl border border-pink-50"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="w-full max-w-[600px] bg-white/95 backdrop-blur-md p-10 lg:p-12 rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-primary/20 my-auto"
         >
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Create Account</h2>
-            <p className="text-gray-500">Join us to start your beauty journey.</p>
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <img src={logo} alt="Sathya Beauty" className="w-14 h-14 object-contain" />
+              <span className="text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-serif">SathyaBeauty</span>
+            </div>
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Create Account</h2>
+            <p className="text-base text-gray-500 font-medium">Join us to start your beauty journey.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <FaUser />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-1.5">
+              <label className="block text-gray-700 text-sm font-semibold tracking-wide">Full Name</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                  <FaUser size={14} />
                 </div>
                 <input 
                   type="text" 
@@ -110,17 +116,17 @@ const Signup = () => {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
+                  className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800 font-medium placeholder:font-normal placeholder-gray-400"
                   placeholder="John Doe" 
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <FaEnvelope />
+            <div className="space-y-1.5">
+              <label className="block text-gray-700 text-sm font-semibold tracking-wide">Email Address</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                  <FaEnvelope size={14} />
                 </div>
                 <input 
                   type="email" 
@@ -130,17 +136,17 @@ const Signup = () => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
+                  className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800 font-medium placeholder:font-normal placeholder-gray-400"
                   placeholder="name@example.com" 
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <FaPhone />
+            <div className="space-y-1.5">
+              <label className="block text-gray-700 text-sm font-semibold tracking-wide">Phone Number</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                  <FaPhone size={14} />
                 </div>
                 <input 
                   type="tel" 
@@ -150,17 +156,17 @@ const Signup = () => {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
-                  placeholder="+91 98765 43210" 
+                  className="w-full pl-10 pr-4 py-3 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800 font-medium placeholder:font-normal placeholder-gray-400"
+                  placeholder="+91 9876543210" 
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <FaLock />
+            <div className="space-y-1.5">
+              <label className="block text-gray-700 text-sm font-semibold tracking-wide">Password</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                  <FaLock size={14} />
                 </div>
                 <input 
                   type={showPassword ? "text" : "password"}
@@ -171,25 +177,24 @@ const Signup = () => {
                   minLength="8"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
+                  className="w-full pl-10 pr-10 py-3 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800 font-medium placeholder:font-normal placeholder-gray-400"
                   placeholder="Create a strong password" 
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-primary transition-colors focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-primary transition-colors focus:outline-none"
                 >
-                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
                 </button>
               </div>
-              <p className="mt-2 text-xs text-gray-500 font-medium">Enter a minimum of 8 characters.</p>
             </div>
 
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <FaLock />
+            <div className="space-y-1.5">
+              <label className="block text-gray-700 text-sm font-semibold tracking-wide">Confirm Password</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                  <FaLock size={14} />
                 </div>
                 <input 
                   type={showConfirmPassword ? "text" : "password"}
@@ -199,30 +204,30 @@ const Signup = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                  className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-gray-800"
+                  className="w-full pl-10 pr-10 py-3 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-800 font-medium placeholder:font-normal placeholder-gray-400"
                   placeholder="Confirm your password" 
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-primary transition-colors focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-primary transition-colors focus:outline-none"
                 >
-                  {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  {showConfirmPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
                 </button>
               </div>
             </div>
 
             <button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white font-bold py-4 rounded-xl shadow-[0_10px_20px_rgba(233,30,99,0.2)] hover:shadow-[0_15px_30px_rgba(233,30,99,0.4)] transition-all transform hover:-translate-y-1 mt-4"
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-[#c28900] hover:to-primary text-white font-bold tracking-wide py-3.5 rounded-xl shadow-[0_8px_20px_rgba(214,151,0,0.3)] hover:shadow-[0_12px_25px_rgba(214,151,0,0.4)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 mt-6"
             >
               Sign Up
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-gray-600 font-medium">
             Already have an account?{' '}
-            <Link to="/login" className="font-bold text-primary hover:text-secondary transition-colors">
+            <Link to="/login" className="font-bold text-primary hover:text-[#c28900] transition-colors ml-1">
               Sign in here
             </Link>
           </p>
@@ -230,14 +235,14 @@ const Signup = () => {
       </div>
 
       {/* Right Side - Image/Branding */}
-      <div className="hidden lg:flex w-1/2 bg-cover bg-center relative" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516975080661-4680fb2b7f3b?auto=format&fit=crop&q=80&w=1920')" }}>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-pink-900/30"></div>
+      <div className="hidden lg:flex w-1/2 bg-cover bg-center relative" style={{ backgroundImage: `url(${signupImage})` }}>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-amber-900/30"></div>
         <div className="relative z-10 flex flex-col justify-end px-16 pb-24 text-white w-full">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1 className="text-4xl font-bold leading-tight mb-4">
               "Beauty is about enhancing what you have. Let yourself shine through."
             </h1>
-            <p className="text-lg text-pink-100/80 font-light max-w-md">
+            <p className="text-lg text-amber-100/80 font-light max-w-md">
               Join thousands of satisfied customers who trust us with their beauty and wellness needs.
             </p>
           </motion.div>

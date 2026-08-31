@@ -19,7 +19,7 @@ const AdminForgotPassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/auth/admin-send-otp/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/admin-send-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -45,7 +45,7 @@ const AdminForgotPassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/auth/admin-verify-otp/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/admin-verify-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp })
@@ -73,7 +73,7 @@ const AdminForgotPassword = () => {
     }
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/auth/admin-reset-password/', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/admin-reset-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, new_password: newPassword })

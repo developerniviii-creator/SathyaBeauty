@@ -18,7 +18,7 @@ const AdminMehandi = () => {
 
   const fetchMehandiServices = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/services/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
       if (res.ok) {
         const data = await res.json();
         const mehandiServices = data.filter(s => s.category === 'Mehandi');
@@ -78,7 +78,7 @@ const AdminMehandi = () => {
     
     try {
       if (editingId) {
-        const res = await fetch(`http://127.0.0.1:8000/api/services/${editingId}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/${editingId}/`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -93,7 +93,7 @@ const AdminMehandi = () => {
           alert('Error updating mehandi service: ' + res.statusText);
         }
       } else {
-        const res = await fetch('http://127.0.0.1:8000/api/services/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -133,7 +133,7 @@ const AdminMehandi = () => {
     if (window.confirm('Are you sure you want to delete this mehandi entry?')) {
       const token = localStorage.getItem('admin_access_token');
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/services/${id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/${id}/`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -190,13 +190,13 @@ const AdminMehandi = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="lg:col-span-5"
         >
-          <div className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-200/50 to-purple-200/50 rounded-bl-full -z-0"></div>
+          <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-bl-full -z-0"></div>
             
             <div className="p-8 relative z-10">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                  <FaMagic className="text-pink-500 mr-2" /> 
+                  <FaMagic className="text-primary mr-2" /> 
                   {editingId ? 'Edit Entry' : 'Add New Entry'}
                 </h2>
                 {editingId && (
@@ -212,13 +212,13 @@ const AdminMehandi = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                    <FaTag className="mr-2 text-pink-400" /> Mehandi Type
+                    <FaTag className="mr-2 text-primary" /> Mehandi Type
                   </label>
                   <select 
                     name="mehandiType"
                     value={formData.mehandiType}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                     required
                   >
                     <option value="" disabled>Select mehandi type</option>
@@ -240,7 +240,7 @@ const AdminMehandi = () => {
                       name="length"
                       value={formData.length}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                       required
                     >
                       <option value="" disabled>Select length</option>
@@ -260,7 +260,7 @@ const AdminMehandi = () => {
                       name="side"
                       value={formData.side}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                       required
                     >
                       <option value="" disabled>Select side</option>
@@ -273,7 +273,7 @@ const AdminMehandi = () => {
 
                 <div>
                   <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                    <span className="mr-2 text-pink-500 font-black">₹</span> Prize Amount
+                    <span className="mr-2 text-primary font-black">₹</span> Prize Amount
                   </label>
                   <input 
                     type="number" 
@@ -281,14 +281,14 @@ const AdminMehandi = () => {
                     value={formData.prize}
                     onChange={handleChange}
                     placeholder="Enter prize amount"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800 font-bold"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800 font-bold"
                     required
                   />
                 </div>
 
                 <div>
                   <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                    <FaClock className="mr-2 text-purple-400" /> Duration
+                    <FaClock className="mr-2 text-secondary" /> Duration
                   </label>
                   <input 
                     type="text" 
@@ -296,13 +296,13 @@ const AdminMehandi = () => {
                     value={formData.duration}
                     onChange={handleChange}
                     placeholder="e.g. 2-3 hours"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                   />
                 </div>
 
                 <div>
                   <label className="flex items-center text-sm font-bold text-gray-700 mb-2">
-                    <FaInfoCircle className="mr-2 text-blue-400" /> Description
+                    <FaInfoCircle className="mr-2 text-secondary" /> Description
                   </label>
                   <textarea 
                     name="description"
@@ -310,7 +310,7 @@ const AdminMehandi = () => {
                     onChange={handleChange}
                     placeholder="Enter detailed description of the design..."
                     rows="3"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm resize-none text-gray-800"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm resize-none text-gray-800"
                   ></textarea>
                 </div>
 
@@ -323,14 +323,14 @@ const AdminMehandi = () => {
                     name="image"
                     accept="image/*"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                   />
                 </div>
 
                 <div className="pt-2">
                   <button 
                     type="submit"
-                    className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary via-pink-500 to-purple-600 rounded-xl hover:shadow-[0_10px_20px_rgba(233,30,99,0.3)] hover:-translate-y-1 focus:outline-none overflow-hidden"
+                    className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-[0_10px_20px_rgba(214,151,0,0.3)] hover:-translate-y-1 focus:outline-none overflow-hidden"
                   >
                     <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                     <span className="relative flex items-center">
@@ -351,12 +351,12 @@ const AdminMehandi = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="lg:col-span-7"
         >
-          <div className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 p-8 h-full">
+          <div className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 p-8 h-full">
             <h2 className="text-xl font-bold text-gray-800 mb-6">Recent Entries</h2>
             
             {savedItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-64 text-center border-2 border-dashed border-pink-200 rounded-2xl bg-pink-50/50">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 text-pink-400 shadow-sm">
+              <div className="flex flex-col items-center justify-center h-64 text-center border-2 border-dashed border-amber-200 rounded-2xl bg-amber-50/50">
+                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 text-primary shadow-sm">
                   <FaMagic size={24} />
                 </div>
                 <h3 className="text-lg font-bold text-gray-800">No Mehandi Entries Yet</h3>
@@ -372,40 +372,40 @@ const AdminMehandi = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       layout
                       key={item.id}
-                      className="p-5 rounded-2xl border border-gray-100 hover:border-pink-200 hover:shadow-lg hover:shadow-pink-100/50 transition-all duration-300 bg-white group flex flex-col md:flex-row gap-4 relative overflow-hidden"
+                      className="p-5 rounded-2xl border border-gray-100 hover:border-amber-200 hover:shadow-lg hover:shadow-amber-100/50 transition-all duration-300 bg-white group flex flex-col md:flex-row gap-4 relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-pink-50 to-purple-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none -z-0"></div>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-50 to-secondary/10 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none -z-0"></div>
                       
                       <div className="flex-1 relative z-10 flex gap-4">
                         {item.image && (
-                          <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden border border-pink-100 shadow-sm">
+                          <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden border border-amber-100 shadow-sm">
                             <img src={item.image} alt={item.mehandiType} className="w-full h-full object-cover" />
                           </div>
                         )}
                         <div className="flex-1">
                           <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-bold text-lg text-gray-800 group-hover:text-pink-600 transition-colors">
+                            <h3 className="font-bold text-lg text-gray-800 group-hover:text-primary transition-colors">
                               {item.mehandiType}
                             </h3>
-                            <span className="bg-gradient-to-r from-primary to-purple-600 text-transparent bg-clip-text font-extrabold text-xl whitespace-nowrap ml-2">
+                            <span className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text font-extrabold text-xl whitespace-nowrap ml-2">
                               ₹{item.prize}
                             </span>
                           </div>
                           <div className="flex flex-wrap gap-2 mb-2">
                             {item.length && (
-                              <span className="bg-pink-50 text-pink-600 border border-pink-100 text-xs font-bold px-2 py-1 rounded-md">
+                              <span className="bg-amber-50 text-primary border border-amber-100 text-xs font-bold px-2 py-1 rounded-md">
                                 {item.length}
                               </span>
                             )}
                             {item.side && (
-                              <span className="bg-purple-50 text-purple-600 border border-purple-100 text-xs font-bold px-2 py-1 rounded-md">
+                              <span className="bg-amber-50 text-secondary border border-amber-100 text-xs font-bold px-2 py-1 rounded-md">
                                 {item.side}
                               </span>
                             )}
                           </div>
                           {item.duration && (
                             <p className="text-sm text-gray-500 flex items-center mb-2 font-medium">
-                              <FaClock className="mr-1 text-pink-400 text-xs" /> {item.duration}
+                              <FaClock className="mr-1 text-primary text-xs" /> {item.duration}
                             </p>
                           )}
                           {item.description && (

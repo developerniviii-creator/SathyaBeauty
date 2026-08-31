@@ -110,7 +110,7 @@ const AdminServices = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/services/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
       if (res.ok) {
         const data = await res.json();
         const filteredData = data.filter(s => 
@@ -172,7 +172,7 @@ const AdminServices = () => {
 
     try {
       if (modalMode === 'add') {
-        const res = await fetch('http://127.0.0.1:8000/api/services/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -187,7 +187,7 @@ const AdminServices = () => {
           console.error(errData);
         }
       } else {
-        const res = await fetch(`http://127.0.0.1:8000/api/services/${currentService.id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/${currentService.id}/`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -213,7 +213,7 @@ const AdminServices = () => {
     if (window.confirm("Are you sure you want to delete this service?")) {
       const token = localStorage.getItem('admin_access_token');
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/services/${id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/${id}/`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

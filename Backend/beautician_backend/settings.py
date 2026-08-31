@@ -12,16 +12,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*zj2u97w9478g&l*op-mu7n&kwqtfb#ukswcz0njt82(uumdmh'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django_mongodb_backend',
         'NAME': 'beautician_db',
-        'HOST': 'mongodb+srv://developerniviii_db_user:1oeMMyiTeOW0ijFg@cluster0.epg6eeg.mongodb.net/?appName=Cluster0',
+        'HOST': os.environ.get('MONGO_URI'),
         'OPTIONS': {
             'tls': True,
             'tlsAllowInvalidCertificates': True
@@ -162,8 +165,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'developerniviii@gmail.com'
-EMAIL_HOST_PASSWORD = 'axcdyoeitbtjkzvi'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 
-DEFAULT_FROM_EMAIL = 'developerniviii@gmail.com'
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+
+# Razorpay Configuration
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET')
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')

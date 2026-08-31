@@ -15,7 +15,7 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/services/');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
         if (res.ok) {
           const data = await res.json();
           // Filter to only show active services
@@ -93,12 +93,12 @@ const Services = () => {
   return (
     <div className="bg-background min-h-screen pb-20 font-sans relative">
       {/* Header Banner */}
-      <div className="bg-gray-900 text-white pt-24 pb-16 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/20"></div>
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-secondary/30 rounded-full blur-3xl"></div>
+      <div className="bg-gray-900 text-white pt-24 pb-16 px-6 relative overflow-hidden border-b border-primary/20 shadow-xl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl z-0"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl z-0"></div>
         
         <div className="container mx-auto text-center relative z-10 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6">Our Premium Services</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Our Premium Services</h1>
           <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
             Explore our wide range of luxury beauty treatments tailored specifically for you. Select a category below to find the perfect service.
           </p>
@@ -110,7 +110,7 @@ const Services = () => {
               placeholder="Search for a service..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-6 py-4 pl-14 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-primary/50 shadow-lg"
+              className="w-full px-6 py-4 pl-14 rounded-full bg-white text-gray-900 focus:outline-none focus:ring-4 focus:ring-primary/50 shadow-lg"
             />
             <FaSearch className="absolute left-6 top-5 text-gray-400 text-lg" />
           </div>
@@ -123,8 +123,8 @@ const Services = () => {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 capitalize tracking-wide shadow-sm
                   ${activeCategory === cat 
-                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg transform scale-105 border-transparent' 
-                    : 'bg-white/10 text-gray-200 hover:bg-white/20 border-white/10 hover:border-white/30 backdrop-blur-md'
+                    ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg transform scale-105 border-transparent' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border-gray-700 hover:border-primary/50'
                   } border`}
               >
                 {cat}

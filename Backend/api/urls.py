@@ -6,7 +6,8 @@ from .views import (
     OfferViewSet, BookingViewSet, PaymentViewSet, CustomTokenObtainPairView, AdminLoginView,
     CreateRazorpayOrderView, VerifyRazorpayPaymentView, SystemSettingView,
     SendOTPView, VerifyOTPView, ResetPasswordView,
-    AdminSendOTPView, AdminVerifyOTPView, AdminResetPasswordView
+    AdminSendOTPView, AdminVerifyOTPView, AdminResetPasswordView,
+    GoogleLoginView
 )
 
 router = DefaultRouter()
@@ -23,6 +24,7 @@ urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='auth_register'),
     path('auth/login/', CustomTokenObtainPairView.as_view(), name='auth_login'),
     path('auth/admin-login/', AdminLoginView.as_view(), name='admin_login'),
+    path('auth/google-login/', GoogleLoginView.as_view(), name='google_login'),
     path('auth/send-otp/', SendOTPView.as_view(), name='send_otp'),
     path('auth/verify-otp/', VerifyOTPView.as_view(), name='verify_otp'),
     path('auth/reset-password/', ResetPasswordView.as_view(), name='reset_password'),

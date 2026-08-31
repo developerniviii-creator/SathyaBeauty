@@ -9,7 +9,7 @@ const AdminCustomers = () => {
     const fetchCustomers = async () => {
       try {
         const token = localStorage.getItem('admin_access_token');
-        const res = await fetch('http://127.0.0.1:8000/api/users/customers/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/users/customers/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {

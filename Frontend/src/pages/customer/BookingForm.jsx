@@ -32,7 +32,7 @@ const BookingForm = () => {
       const token = localStorage.getItem('customer_access_token');
       if (token) {
         try {
-          const res = await fetch('http://127.0.0.1:8000/api/users/profile/', {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/users/profile/`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -93,7 +93,7 @@ const BookingForm = () => {
     });
 
     try {
-      const orderResponse = await fetch('http://127.0.0.1:8000/api/payments/create-order/', {
+      const orderResponse = await fetch(`${import.meta.env.VITE_API_URL}/payments/create-order/`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -129,7 +129,7 @@ const BookingForm = () => {
           });
 
           try {
-            const verifyResponse = await fetch('http://127.0.0.1:8000/api/payments/verify-payment/', {
+            const verifyResponse = await fetch(`${import.meta.env.VITE_API_URL}/payments/verify-payment/`, {
               method: 'POST',
               headers,
               body: JSON.stringify({

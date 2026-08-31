@@ -20,7 +20,7 @@ const AdminPackages = () => {
 
   const fetchPackages = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/packages/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/packages/`);
       if (res.ok) {
         const data = await res.json();
         setPackages(data);
@@ -32,7 +32,7 @@ const AdminPackages = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/services/');
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
       if (res.ok) {
         const data = await res.json();
         setAvailableServices(data.filter(s => s.status === 'Active'));
@@ -96,7 +96,7 @@ const AdminPackages = () => {
 
     try {
       if (modalMode === 'add') {
-        const res = await fetch('http://127.0.0.1:8000/api/packages/', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/packages/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -109,7 +109,7 @@ const AdminPackages = () => {
           alert('Error adding package: ' + res.statusText);
         }
       } else {
-        const res = await fetch(`http://127.0.0.1:8000/api/packages/${currentPackage.id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/packages/${currentPackage.id}/`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -134,7 +134,7 @@ const AdminPackages = () => {
     if (window.confirm("Are you sure you want to delete this package?")) {
       const token = localStorage.getItem('admin_access_token');
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/packages/${id}/`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/packages/${id}/`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -153,8 +153,8 @@ const AdminPackages = () => {
 
   return (
     <div className="relative font-sans min-h-[80vh] pb-10">
-      <div className="absolute top-20 right-10 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl -z-10"></div>
 
       <div className="flex justify-between items-center mb-8 relative z-10">
         <div>
@@ -163,7 +163,7 @@ const AdminPackages = () => {
         </div>
         <button 
           onClick={handleOpenAdd}
-          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-md shadow-pink-200/50 hover:shadow-lg text-white px-6 py-3 rounded-xl flex items-center transition-all duration-300 transform hover:-translate-y-1 font-bold"
+          className="bg-gradient-to-r from-primary to-secondary hover:from-[#c28900] hover:to-primary shadow-md shadow-primary/30 hover:shadow-lg text-white px-6 py-3 rounded-xl flex items-center transition-all duration-300 transform hover:-translate-y-1 font-bold"
         >
           <FaPlus className="mr-2" /> Create Package
         </button>
@@ -178,7 +178,7 @@ const AdminPackages = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-pink-50 flex overflow-hidden group hover:shadow-2xl hover:shadow-pink-200/50 transition-all duration-300"
+              className="bg-white rounded-3xl shadow-xl shadow-amber-100/40 border border-amber-100 flex overflow-hidden group hover:shadow-2xl hover:shadow-amber-200/50 transition-all duration-300"
             >
               {pkg.image && (
                 <div className="w-1/3 min-h-full">
@@ -187,7 +187,7 @@ const AdminPackages = () => {
               )}
               <div className="p-8 flex-1">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-2xl font-bold text-primary group-hover:text-pink-600 transition-colors">{pkg.name}</h3>
+                  <h3 className="text-2xl font-bold text-primary group-hover:text-primary transition-colors">{pkg.name}</h3>
                   <span className="text-xl font-extrabold text-primary">₹{pkg.price}</span>
                 </div>
                 <p className="text-sm text-gray-500 font-medium mb-4">{pkg.services?.length || 0} Services Included</p>
@@ -208,10 +208,10 @@ const AdminPackages = () => {
                 </ul>
               </div>
               
-              <div className="bg-pink-50/50 flex flex-col justify-center border-l border-pink-50 p-4 space-y-4">
+              <div className="bg-amber-50/50 flex flex-col justify-center border-l border-amber-100 p-4 space-y-4">
                 <button 
                   onClick={() => handleOpenEdit(pkg)}
-                  className="text-gray-500 hover:text-pink-600 p-3 rounded-xl hover:bg-white transition-colors shadow-sm bg-white/50" 
+                  className="text-gray-500 hover:text-primary p-3 rounded-xl hover:bg-white transition-colors shadow-sm bg-white/50" 
                   title="Edit"
                 >
                   <FaEdit size={20} />
@@ -245,7 +245,7 @@ const AdminPackages = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-3xl w-full max-w-3xl p-8 shadow-2xl shadow-pink-200/50 relative z-10 border border-pink-100 max-h-[90vh] flex flex-col"
+              className="bg-white rounded-3xl w-full max-w-3xl p-8 shadow-2xl shadow-primary/20 relative z-10 border border-amber-100 max-h-[90vh] flex flex-col"
             >
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-extrabold text-primary">
@@ -253,7 +253,7 @@ const AdminPackages = () => {
                 </h2>
                 <button 
                   onClick={handleCloseModal}
-                  className="text-gray-400 hover:text-primary bg-gray-50 hover:bg-pink-50 p-2 rounded-full transition-colors"
+                  className="text-gray-400 hover:text-primary bg-gray-50 hover:bg-amber-50 p-2 rounded-full transition-colors"
                 >
                   <FaTimes size={18} />
                 </button>
@@ -270,7 +270,7 @@ const AdminPackages = () => {
                       value={currentPackage?.name || ''} 
                       onChange={handleChange}
                       required
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                       placeholder="e.g. Bridal Beauty Pack"
                     />
                   </div>
@@ -282,7 +282,7 @@ const AdminPackages = () => {
                       type="file" 
                       accept="image/*"
                       onChange={handleFileChange}
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm text-gray-800"
                     />
                   </div>
                   
@@ -295,7 +295,7 @@ const AdminPackages = () => {
                       value={currentPackage?.price || ''} 
                       onChange={handleChange}
                       required
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm font-bold text-pink-600"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm font-bold text-primary"
                       placeholder="e.g. 5000"
                     />
                   </div>
@@ -307,7 +307,7 @@ const AdminPackages = () => {
                       value={currentPackage?.description || ''} 
                       onChange={handleChange}
                       rows="3"
-                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500 outline-none transition-all shadow-sm resize-none text-gray-800"
+                      className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all shadow-sm resize-none text-gray-800"
                       placeholder="Enter detailed description of the package..."
                     />
                   </div>
@@ -324,12 +324,12 @@ const AdminPackages = () => {
                             return (
                               <label 
                                 key={service.id} 
-                                className={`flex items-start p-3 border rounded-xl cursor-pointer transition-all ${isSelected ? 'border-pink-500 bg-pink-50 shadow-sm' : 'border-gray-200 bg-white hover:border-pink-300'}`}
+                                className={`flex items-start p-3 border rounded-xl cursor-pointer transition-all ${isSelected ? 'border-primary bg-amber-50 shadow-sm' : 'border-gray-200 bg-white hover:border-primary/50'}`}
                               >
                                 <div className="flex items-center h-5 mt-1">
                                   <input 
                                     type="checkbox" 
-                                    className="w-5 h-5 rounded border-gray-300 text-pink-500 focus:ring-pink-500 cursor-pointer accent-pink-500"
+                                    className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer accent-primary"
                                     checked={!!isSelected}
                                     onChange={(e) => {
                                       const id = service.id;
@@ -345,10 +345,10 @@ const AdminPackages = () => {
                                   />
                                 </div>
                                 <div className="ml-3 flex-1">
-                                  <span className={`block text-sm font-bold ${isSelected ? 'text-pink-700' : 'text-gray-700'}`}>
+                                  <span className={`block text-sm font-bold ${isSelected ? 'text-primary' : 'text-gray-700'}`}>
                                     {service.name}
                                   </span>
-                                  <span className={`block text-xs font-extrabold mt-1 ${isSelected ? 'text-pink-600' : 'text-purple-600'}`}>
+                                  <span className={`block text-xs font-extrabold mt-1 ${isSelected ? 'text-primary' : 'text-secondary'}`}>
                                     ₹{service.price}
                                   </span>
                                 </div>
@@ -371,7 +371,7 @@ const AdminPackages = () => {
                 <button 
                   type="submit"
                   form="package-form"
-                  className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl hover:shadow-[0_10px_20px_rgba(236,72,153,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden"
+                  className="w-full group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-primary to-secondary rounded-2xl hover:shadow-[0_10px_20px_rgba(214,151,0,0.4)] hover:-translate-y-1 focus:outline-none overflow-hidden"
                 >
                   <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                   <span className="relative flex items-center text-lg tracking-wide">

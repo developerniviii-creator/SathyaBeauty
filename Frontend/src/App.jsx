@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { store } from './redux/store';
 import { AuthProvider } from './context/AuthContext';
 import AdminLayout from './layouts/AdminLayout';
@@ -32,46 +33,48 @@ const Placeholder = ({ title }) => <div className="p-8"><h1 className="text-2xl 
 
 function App() {
   return (
-    <Provider store={store}>
-      <AuthProvider>
-        <Router>
-          <Routes>
-            {/* Standalone Auth Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Provider store={store}>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              {/* Standalone Auth Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin-forgot-password" element={<AdminForgotPassword />} />
 
-            {/* Customer Routes */}
-            <Route path="/" element={<CustomerLayout />}>
-              <Route index element={<CustomerHome />} />
-              <Route path="services" element={<CustomerServices />} />
-              <Route path="packages" element={<CustomerPackages />} />
-              <Route path="offers" element={<CustomerOffers />} />
-              <Route path="book" element={<BookingForm />} />
-              <Route path="my-bookings" element={<CustomerMyBookings />} />
-              <Route path="profile" element={<CustomerProfile />} />
-            </Route>
+              {/* Customer Routes */}
+              <Route path="/" element={<CustomerLayout />}>
+                <Route index element={<CustomerHome />} />
+                <Route path="services" element={<CustomerServices />} />
+                <Route path="packages" element={<CustomerPackages />} />
+                <Route path="offers" element={<CustomerOffers />} />
+                <Route path="book" element={<BookingForm />} />
+                <Route path="my-bookings" element={<CustomerMyBookings />} />
+                <Route path="profile" element={<CustomerProfile />} />
+              </Route>
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="services" element={<AdminServices />} />
-              <Route path="packages" element={<AdminPackages />} />
-              <Route path="mehandi" element={<AdminMehandi />} />
-              <Route path="hair-extensions" element={<AdminHairExtensions />} />
-              <Route path="offers" element={<AdminOffers />} />
-              <Route path="bookings" element={<AdminBookings />} />
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="services" element={<AdminServices />} />
+                <Route path="packages" element={<AdminPackages />} />
+                <Route path="mehandi" element={<AdminMehandi />} />
+                <Route path="hair-extensions" element={<AdminHairExtensions />} />
+                <Route path="offers" element={<AdminOffers />} />
+                <Route path="bookings" element={<AdminBookings />} />
 
-              <Route path="customers" element={<AdminCustomers />} />
-              <Route path="payments" element={<AdminPayments />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </Provider>
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="payments" element={<AdminPayments />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </Provider>
+    </GoogleOAuthProvider>
   );
 }
 

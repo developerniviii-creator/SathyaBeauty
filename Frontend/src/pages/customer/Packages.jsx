@@ -9,7 +9,7 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/packages/');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/packages/`);
         if (res.ok) {
           const data = await res.json();
           setPackages(data);
