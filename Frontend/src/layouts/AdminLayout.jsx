@@ -8,7 +8,7 @@ import logo from '../assets/SathyaBeauty.png';
 const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout, user } = useAuth();
+  const { adminLogout, adminUser } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   React.useEffect(() => {
@@ -33,7 +33,7 @@ const AdminLayout = () => {
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
-      logout();
+      adminLogout();
       navigate('/admin-login');
     }
   };
