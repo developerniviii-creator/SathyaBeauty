@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mockServices, mockReviews } from '../../utils/dummyData';
+import { mockReviews } from '../../utils/dummyData';
 import { FaCut, FaHandSparkles, FaHeart, FaStar, FaShieldAlt, FaGem, FaSmileBeam } from 'react-icons/fa';
 
 const Home = () => {
   const [showAllFeatures, setShowAllFeatures] = useState(false);
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/services/`);
+        if (res.ok) {
+          const data = await res.json();
+          // Show only active services, limited to 4 for the home page
+          setServices(data.filter(s => s.status === 'Active').slice(0, 4));
+        }
+      } catch (err) {
+        console.error('Failed to fetch services:', err);
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+    fetchServices();
+  }, []);
 
   const allFeatures = [
     { icon: <FaCut size={32} />, title: 'Expert Stylists', desc: 'Crafting the perfect look for you with modern styling techniques.', bg: 'bg-amber-50', text: 'text-primary', border: 'border-amber-200' },
@@ -131,37 +151,66 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {mockServices.map((service, index) => (
-              <motion.div 
-                key={service.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-                className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 hover:border-transparent hover:bg-primary transition-all duration-500 group"
-              >
-                <div className="relative overflow-hidden h-56">
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-500"></div>
-                  <img src={service.image} alt={service.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-primary shadow-sm z-20 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
-                    {service.category}
-                  </div>
-                </div>
-                <div className="p-6 relative transition-colors duration-500">
-                  <div className="absolute -top-6 right-6 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-white group-hover:text-primary transition-colors duration-500 z-20">
-                    <FaStar />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-white transition-colors duration-500">{service.name}</h3>
-                  <p className="text-gray-500 mb-6 line-clamp-2 text-sm group-hover:text-amber-100 transition-colors duration-500">{service.description}</p>
-                  <div className="flex justify-between items-center pt-4 border-t border-gray-100 group-hover:border-white/20 transition-colors duration-500">
-                    <div>
-                      <span className="text-xs text-gray-400 block group-hover:text-amber-200 transition-colors duration-500">Starting from</span>
-                      <span className="text-2xl font-extrabold text-primary group-hover:text-white transition-colors duration-500">₹{service.price}</span>
+            {loadingServices ? (
+              // Loading skeleton cards
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 animate-pulse">
+                  <div className="h-56 bg-gray-200"></div>
+                  <div className="p-6">
+                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div className="h-4 bg-gray-100 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-100 rounded w-2/3 mb-6"></div>
+                    <div className="pt-4 border-t border-gray-100">
+                      <div className="h-3 bg-gray-100 rounded w-1/3 mb-1"></div>
+                      <div className="h-7 bg-gray-200 rounded w-1/4"></div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              ))
+            ) : services.length === 0 ? (
+              // Empty state
+              <div className="col-span-full text-center py-16">
+                <FaCut className="mx-auto text-5xl text-primary/30 mb-4" />
+                <h3 className="text-xl font-bold text-gray-400">No services available yet</h3>
+                <p className="text-gray-400 mt-2">Check back soon for our amazing services!</p>
+              </div>
+            ) : (
+              services.map((service, index) => (
+                <motion.div 
+                  key={service.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 }}
+                  className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 hover:border-transparent hover:bg-primary transition-all duration-500 group"
+                >
+                  <div className="relative overflow-hidden h-56">
+                    <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-500"></div>
+                    <img 
+                      src={service.image || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600'} 
+                      alt={service.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-primary shadow-sm z-20 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+                      {service.category}
+                    </div>
+                  </div>
+                  <div className="p-6 relative transition-colors duration-500">
+                    <div className="absolute -top-6 right-6 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-white group-hover:text-primary transition-colors duration-500 z-20">
+                      <FaStar />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-white transition-colors duration-500">{service.name}</h3>
+                    <p className="text-gray-500 mb-6 line-clamp-2 text-sm group-hover:text-amber-100 transition-colors duration-500">{service.description}</p>
+                    <div className="flex justify-between items-center pt-4 border-t border-gray-100 group-hover:border-white/20 transition-colors duration-500">
+                      <div>
+                        <span className="text-xs text-gray-400 block group-hover:text-amber-200 transition-colors duration-500">Starting from</span>
+                        <span className="text-2xl font-extrabold text-primary group-hover:text-white transition-colors duration-500">₹{service.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
           
           <div className="mt-10 text-center md:hidden">
